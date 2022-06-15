@@ -81,5 +81,19 @@
             public const string ASSIGN_MINION_TO_VILLAIN_QUERY =
                 @"INSERT INTO MinionsVillains (MinionId, VillainId) VALUES (@minionId, @villainId)";
         }  
+
+        public static class Task05Queries
+        {
+            public const string UPDATE_TOWNS_QUERY =
+                @"UPDATE Towns
+                   SET Name = UPPER(Name)
+                 WHERE CountryCode = (SELECT c.Id FROM Countries AS c WHERE c.Name = @countryName)";
+
+            public const string SELECT_TOWNS_BY_GIVEN_COUNTRY_QUERY =
+                @"SELECT t.Name 
+                FROM Towns as t
+                JOIN Countries AS c ON c.Id = t.CountryCode
+                WHERE c.Name = @countryName";
+        }
     }
 }

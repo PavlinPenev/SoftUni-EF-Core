@@ -25,6 +25,10 @@ namespace ADO.NET
 
         public const string SUCCESSFULLY_ASSIGNED_MINION_TO_VILLAIN =
             "Successfully added {0} to be minion of {1}.";
+
+        public const string TOWNS_AFFECTED = "{0} town names were affected.";
+
+        public const string NO_TOWNS_AFFECTED = "No town names were affected.";
     }
 
     public static class ErrorMessagesConstants

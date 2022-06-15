@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using VillainNames;
 using InitialSetup;
+using ChangeTownNamesCasing;
 
 namespace ADO.NET
 {
@@ -30,6 +31,9 @@ namespace ADO.NET
                         break;
                     case "04":
                         await Task04.RunTask04();
+                        break;
+                    case "05":
+                        await Task05.RunTask05();
                         break;
                     default:
                         Console.WriteLine(Constants.ENTER_EXISTING_TASK_NUMBER);
