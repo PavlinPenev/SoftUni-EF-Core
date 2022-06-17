@@ -131,5 +131,21 @@
                    SET Name = UPPER(LEFT(Name, 1)) + SUBSTRING(Name, 2, LEN(Name)), Age += 1
                  WHERE Id = @Id";
         }
+
+        public static class Task09Queries
+        {
+            public const string CREATE_PROCEDURE_GET_OLDER_QUERY =
+                @"CREATE OR ALTER PROC usp_GetOlder @id INT
+                AS
+                UPDATE Minions
+                   SET Age += 1
+                 WHERE Id = @Id";
+
+            public const string EXEC_PROCEDURE_GET_OLDER_QUERY =
+                @"EXEC dbo.usp_GetOlder @Id";
+
+            public const string SELECT_MINION_NAMES_AND_AGE_QUERY =
+                @"SELECT Name, Age FROM Minions WHERE Id = @Id";
+        }
     }
 }

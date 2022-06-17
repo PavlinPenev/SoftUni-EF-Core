@@ -41,6 +41,8 @@ namespace ADO.NET
         public const string PLEASE_ENTER_MINION_INFO = "Please enter minion info: ";
 
         public const string PLEASE_ENTER_MINION_IDS = "Please enter minion IDs separated by space: ";
+
+        public const string PLEASE_ENTER_MINION_ID = "Please enter minion ID: ";
     }
 
     public static class ErrorMessagesConstants
