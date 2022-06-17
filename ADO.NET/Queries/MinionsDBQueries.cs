@@ -95,5 +95,30 @@
                 JOIN Countries AS c ON c.Id = t.CountryCode
                 WHERE c.Name = @countryName";
         }
+
+        public static class Task06Queries
+        {
+            public const string SELECT_VILLAINS_NAME_QUERY =
+                @"SELECT Name FROM Villains WHERE Id = @villainId";
+
+            public const string DELETE_VILLAIN_QUERY =
+                @"DELETE FROM MinionsVillains 
+                        WHERE VillainId = @villainId
+
+                DELETE FROM Villains
+                        WHERE Id = @villainId";
+
+            public const string GET_COUNT_OF_VILLAINS_MINIONS_QUERY =
+                @"SELECT COUNT(*)
+                    FROM MinionsVillains AS mv
+                    JOIN Minions As m ON mv.MinionId = m.Id
+                    WHERE mv.VillainId = @villainId";
+        }
+
+        public static class Task07Queries
+        {
+            public const string SELECT_ALL_MINION_NAMES_QUERY =
+                @"SELECT Name FROM Minions";
+        }
     }
 }

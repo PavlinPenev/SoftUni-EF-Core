@@ -13,7 +13,9 @@ namespace AddMinion
     {
         public static async Task RunTask04()
         {
+            Console.Write(Constants.PLEASE_ENTER_MINION_INFO);
             var minionInfo = Console.ReadLine().Split().Skip(1).ToList();
+            Console.Write(Constants.PLEASE_ENTER_VILLAIN_INFO);
             var villainName = Console.ReadLine().Split().Skip(1).FirstOrDefault();
 
             try

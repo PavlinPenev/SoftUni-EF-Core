@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using VillainNames;
 using InitialSetup;
 using ChangeTownNamesCasing;
+using RemoveVillain;
+using PrintAllMinionNames;
 
 namespace ADO.NET
 {
@@ -34,6 +36,12 @@ namespace ADO.NET
                         break;
                     case "05":
                         await Task05.RunTask05();
+                        break;
+                    case "06":
+                        await Task06.RunTask06();
+                        break;
+                    case "07":
+                        await Task07.RunTask07();
                         break;
                     default:
                         Console.WriteLine(Constants.ENTER_EXISTING_TASK_NUMBER);

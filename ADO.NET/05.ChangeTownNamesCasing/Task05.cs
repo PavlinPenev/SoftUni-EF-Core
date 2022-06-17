@@ -13,6 +13,7 @@ namespace ChangeTownNamesCasing
     {
         public static async Task RunTask05()
         {
+            Console.Write(Constants.PLEASE_ENTER_COUNTRY_NAME);
             var countryName = Console.ReadLine();
 
             List<string> towns = new List<string>();

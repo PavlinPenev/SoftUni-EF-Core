@@ -29,6 +29,16 @@ namespace ADO.NET
         public const string TOWNS_AFFECTED = "{0} town names were affected.";
 
         public const string NO_TOWNS_AFFECTED = "No town names were affected.";
+
+        public const string VILLAIN_DELETED = "{0} was deleted.";
+
+        public const string MINIONS_RELEASED = "{0} minions were released.";
+
+        public const string PLEASE_ENTER_COUNTRY_NAME = "Please enter country name: ";
+
+        public const string PLEASE_ENTER_VILLAIN_INFO = "Please enter villain info: ";
+
+        public const string PLEASE_ENTER_MINION_INFO = "Please enter minion info: ";
     }
 
     public static class ErrorMessagesConstants
@@ -36,5 +46,7 @@ namespace ADO.NET
         public const string VILLAIN_DOESNT_EXIST_ERROR = "No villain with ID {0} exists in the database.";
 
         public const string NO_MINIONS_ERROR = "(no minions)";
+
+        public const string NO_SUCH_VILLAIN_FOUND = "No such villain was found.";
     }
 }
