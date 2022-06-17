@@ -120,5 +120,16 @@
             public const string SELECT_ALL_MINION_NAMES_QUERY =
                 @"SELECT Name FROM Minions";
         }
+
+        public static class Task08Queries
+        {
+            public const string SELECT_MINION_NAMES_AND_AGE_QUERY =
+                @"SELECT Name, Age FROM Minions";
+
+            public const string UPDATE_MINIONS_AGE_QUERY =
+                @"UPDATE Minions
+                   SET Name = UPPER(LEFT(Name, 1)) + SUBSTRING(Name, 2, LEN(Name)), Age += 1
+                 WHERE Id = @Id";
+        }
     }
 }

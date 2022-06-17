@@ -7,6 +7,7 @@ using InitialSetup;
 using ChangeTownNamesCasing;
 using RemoveVillain;
 using PrintAllMinionNames;
+using IncreaseMinionAge;
 
 namespace ADO.NET
 {
@@ -42,6 +43,9 @@ namespace ADO.NET
                         break;
                     case "07":
                         await Task07.RunTask07();
+                        break;
+                    case "08":
+                        await Task08.RunTask08();
                         break;
                     default:
                         Console.WriteLine(Constants.ENTER_EXISTING_TASK_NUMBER);
