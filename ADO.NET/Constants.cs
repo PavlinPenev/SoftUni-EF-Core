@@ -36,9 +36,9 @@ namespace ADO.NET
 
         public const string PLEASE_ENTER_COUNTRY_NAME = "Please enter country name: ";
 
-        public const string PLEASE_ENTER_VILLAIN_INFO = "Please enter villain info: ";
+        public const string PLEASE_ENTER_VILLAIN_INFO = "Please enter villain info in the format - Villain: <name>: ";
 
-        public const string PLEASE_ENTER_MINION_INFO = "Please enter minion info: ";
+        public const string PLEASE_ENTER_MINION_INFO = "Please enter minion info in the format - Minion: <name> <age> <town>: ";
 
         public const string PLEASE_ENTER_MINION_IDS = "Please enter minion IDs separated by space: ";
 
