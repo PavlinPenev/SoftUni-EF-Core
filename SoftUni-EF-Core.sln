@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADO.NET", "ADO.NET\ADO.NET.csproj", "{BD0DD688-A87B-4219-BB6D-5EF6F05B63F3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoftUni", "SoftUni\SoftUni.csproj", "{483AE1A8-23BE-401E-BFFC-9A53CE1C0A08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{BD0DD688-A87B-4219-BB6D-5EF6F05B63F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD0DD688-A87B-4219-BB6D-5EF6F05B63F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD0DD688-A87B-4219-BB6D-5EF6F05B63F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{483AE1A8-23BE-401E-BFFC-9A53CE1C0A08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{483AE1A8-23BE-401E-BFFC-9A53CE1C0A08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{483AE1A8-23BE-401E-BFFC-9A53CE1C0A08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{483AE1A8-23BE-401E-BFFC-9A53CE1C0A08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
