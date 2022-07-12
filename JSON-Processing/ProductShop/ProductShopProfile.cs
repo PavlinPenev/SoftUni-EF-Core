@@ -10,5 +10,6 @@ namespace ProductShop
         public ProductShopProfile()
         {
             CreateMap<CategoryDto, Category>();
+        }   
     }
 }
