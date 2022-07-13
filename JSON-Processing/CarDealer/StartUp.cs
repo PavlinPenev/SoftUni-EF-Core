@@ -272,6 +272,7 @@ namespace CarDealer
         }
         #endregion
 
+        #region Configurations
         private static void GenerateMapper()
         {
             MapperConfiguration config = new MapperConfiguration(cnfg =>
@@ -315,5 +316,6 @@ namespace CarDealer
                 NullValueHandling = NullValueHandling.Ignore
             };
         }
+        #endregion
     }
 }
