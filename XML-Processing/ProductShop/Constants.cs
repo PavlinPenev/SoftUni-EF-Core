@@ -8,9 +8,17 @@ namespace ProductShop
     {
         public const string Users = "Users";
 
+        public const string UsersLowerCase = "users";
+
         public const string User = "User";
 
         public const string Products = "Products";
+
+        public const string ProductsLowerCase = "products";
+
+        public const string SoldProducts = "SoldProducts";
+
+        public const string SoldProductsLowerCase = "soldProducts";
 
         public const string Product = "Product";
 
@@ -36,9 +44,17 @@ namespace ProductShop
 
         public const string PriceLowerCase = "price";
 
+        public const string AveragePriceLowerCase = "averagePrice";
+
+        public const string TotalRevenueLowerCase = "totalRevenue";
+
         public const string BuyerIdLowerCase = "buyerId";
 
+        public const string BuyerLowerCase = "buyer";
+
         public const string SellerIdLowerCase = "sellerId";
+
+        public const string CountLowerCase = "count";
 
         public static class NotificationsConstants
         {

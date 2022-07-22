@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using ProductShop.Data;
+using ProductShop.Dtos.Export;
 using ProductShop.Dtos.Import;
 using ProductShop.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace ProductShop
@@ -20,7 +23,7 @@ namespace ProductShop
 
             ResetDatabase(dbContext);
 
-            // Console.WriteLine(GetUsersWithProducts(dbContext));
+            Console.WriteLine(GetUsersWithProducts(dbContext));
         }
 
         public static void ResetDatabase(ProductShopContext context)
@@ -49,14 +52,7 @@ namespace ProductShop
         #region Import Data
         public static string ImportUsers(ProductShopContext context, string xmlInput) 
         {
-            var serializer = SerializerInit(Constants.Users, typeof(List<UserDto>));
-
-            List<UserDto> userDtos = null;
-
-            using (StringReader reader = new StringReader(xmlInput))
-            {
-                userDtos = (List<UserDto>)serializer.Deserialize(reader);
-            }
+            var userDtos = Deserializer<List<UserDto>>(Constants.Users, xmlInput);
 
             GenerateMapper();
 
@@ -70,17 +66,7 @@ namespace ProductShop
 
         public static string ImportProducts(ProductShopContext context, string xmlInput)
         {
-            var serializer = SerializerInit(Constants.Products, typeof(List<ProductDto>));
-
-            var productDtos = new List<ProductDto>();
-
-            using (StringReader reader = new StringReader(xmlInput))
-            {
-                productDtos = 
-                    ((List<ProductDto>)serializer.Deserialize(reader))
-                    //.Where(pd => pd.BuyerId != 0)
-                    .ToList();
-            }
+            var productDtos = Deserializer<List<ProductDto>>(Constants.Products, xmlInput);
 
             GenerateMapper();
 
@@ -94,14 +80,7 @@ namespace ProductShop
 
         public static string ImportCategories(ProductShopContext context, string xmlInput)
         {
-            var serializer = SerializerInit(Constants.Categories, typeof(List<CategoryDto>));
-
-            var categoryDtos = new List<CategoryDto>();
-
-            using (StringReader reader = new StringReader(xmlInput))
-            {
-                categoryDtos = ((List<CategoryDto>)serializer.Deserialize(reader)).Where(c => c.Name != null).ToList();
-            }
+            var categoryDtos = Deserializer<List<CategoryDto>>(Constants.Categories, xmlInput);
 
             GenerateMapper();
 
@@ -115,19 +94,11 @@ namespace ProductShop
 
         public static string ImportCategoryProducts(ProductShopContext context, string xmlInput)
         {
-            var serializer = SerializerInit(Constants.CategoryProducts, typeof(List<CategoryProductDto>));
-
-            var categoryProductDtos = new List<CategoryProductDto>();
-
-            using (StringReader reader = new StringReader(xmlInput))
-            {
-                categoryProductDtos = 
-                    ((List<CategoryProductDto>)serializer.Deserialize(reader))
-                    .Where(cp => 
+            var categoryProductDtos = Deserializer<List<CategoryProductDto>>(Constants.CategoryProducts, xmlInput)
+                .Where(cp =>
                         context.Categories.Find(cp.CategoryId) != null
                         && context.Products.Find(cp.ProductId) != null)
-                    .ToList();
-            }
+                .ToList();
 
             GenerateMapper();
 
@@ -141,16 +112,120 @@ namespace ProductShop
         #endregion
 
         #region Query Tasks
+        public static string GetProductsInRange(ProductShopContext context)
+        {
+            GenerateMapper();
 
+            var products = context.Products
+                .Where(p => p.Price >= 500 && p.Price <= 1000)
+                .OrderBy(p => p.Price)
+                .Take(10)
+                .ProjectTo<ExportProductInRangeDto>(mapper.ConfigurationProvider)
+                .ToList();
+
+            return Serializer<List<ExportProductInRangeDto>>(products, Constants.Products);
+        }
+
+        public static string GetSoldProducts(ProductShopContext context)
+        {
+            GenerateMapper();
+
+            var users = context.Users
+                .Where(u => u.ProductsSold.Count > 0)
+                .OrderBy(u => u.LastName)
+                .ThenBy(u => u.FirstName)
+                .Take(5)
+                .ProjectTo<ExportUserSoldProductsDto>(mapper.ConfigurationProvider)
+                .ToList();
+
+            return Serializer<List<ExportUserSoldProductsDto>>(users, Constants.Users);
+        }
+
+        public static string GetCategoriesByProductsCount(ProductShopContext context)
+        {
+            GenerateMapper();
+
+            var categories = context.Categories
+                .ProjectTo<ExportCategoryByProductsCountDto>(mapper.ConfigurationProvider)
+                .OrderByDescending(c => c.Count)
+                .ThenBy(c => c.TotalRevenue)
+                .ToList();
+
+            return Serializer<List<ExportCategoryByProductsCountDto>>(categories, Constants.Categories);
+
+        }
+
+        public static string GetUsersWithProducts(ProductShopContext context)
+        {
+            GenerateMapper();
+
+            var users = context.Users
+                .ToList()
+                .Where(u => u.ProductsSold.Count > 0)
+                .OrderByDescending(u => u.ProductsSold.Count)
+                .Take(10)
+                .Select(u => new ExportUserWithProductsDto
+                {
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Age = u.Age,
+                    SoldProducts = new ExportSoldProductsDto
+                    {
+                        Count = u.ProductsSold.Count,
+                        Products = u.ProductsSold.Select(ps => new ExportProductDtoV2
+                        {
+                            Name = ps.Name,
+                            Price = ps.Price
+                        })
+                        .OrderByDescending(p => p.Price)
+                        .ToList()
+                    }
+                })
+                .ToList();
+
+
+            var result = new ExportResultUserWithProductsDto
+            {
+                Count = context.Users.Count(u => u.ProductsSold.Count > 0),
+                Users = users
+            };
+
+            return Serializer<ExportResultUserWithProductsDto>(result, Constants.Users);
+        }
         #endregion
 
         #region Private Methods
-        private static XmlSerializer SerializerInit(string rootTag, Type resultDataType)
+        private static T Deserializer<T>(string rootTag, string inputXml)
         {
             XmlRootAttribute root = new XmlRootAttribute(rootTag);
-            XmlSerializer serializer = new XmlSerializer(resultDataType, root);
+            XmlSerializer serializer = new XmlSerializer(typeof(T), root);
 
-            return serializer;
+            T dtos;
+
+            using (StringReader reader = new StringReader(inputXml))
+            {
+                dtos = (T)serializer.Deserialize(reader);
+            }
+
+            return dtos;
+        }
+
+        private static string Serializer<T>(T dto, string rootTag)
+        {
+            var sb = new StringBuilder();
+
+            var root = new XmlRootAttribute(rootTag);
+            var namespaces = new XmlSerializerNamespaces();
+            namespaces.Add(String.Empty, String.Empty);
+
+            var serializer = new XmlSerializer(typeof(T), root);
+
+            using (StringWriter writer = new StringWriter(sb))
+            {
+                serializer.Serialize(writer, dto, namespaces);
+            }
+
+            return sb.ToString().TrimEnd();
         }
 
         private static void GenerateMapper()
