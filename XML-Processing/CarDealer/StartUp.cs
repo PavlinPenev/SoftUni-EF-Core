@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using CarDealer.Data;
+using CarDealer.Dtos.Export;
 using CarDealer.Dtos.Import;
 using CarDealer.Models;
 using System;
@@ -21,7 +23,7 @@ namespace CarDealer
 
             ResetDatabase(dbContext);
 
-            Console.WriteLine();
+            Console.WriteLine(GetSalesWithAppliedDiscount(dbContext));
         }
 
         public static void ResetDatabase(CarDealerContext context)
@@ -148,7 +150,84 @@ namespace CarDealer
         #endregion
 
         #region Query Tasks
+        public static string GetCarsWithDistance(CarDealerContext context)
+        {
+            GenerateMapper();
 
+            var cars = context.Cars
+                .Where(c => c.TravelledDistance >= 2000000)
+                .OrderBy(c => c.Make)
+                .ThenBy(c => c.Model)
+                .Take(10)
+                .ProjectTo<ExportCarWithDistanceDto>(mapper.ConfigurationProvider)
+                .ToList();
+
+            return Serializer<List<ExportCarWithDistanceDto>>(cars, Constants.CarsLowerCase);
+        }
+
+        public static string GetCarsFromMakeBmw(CarDealerContext context)
+        {
+            GenerateMapper();
+
+            var cars = context.Cars
+                .Where(c => c.Make.Contains("bmw", StringComparison.OrdinalIgnoreCase))
+                .OrderBy(c => c.Model)
+                .ThenByDescending(c => c.TravelledDistance)
+                .ProjectTo<ExportCarFromMakeBmwDto>(mapper.ConfigurationProvider)
+                .ToList();
+
+            return Serializer<List<ExportCarFromMakeBmwDto>>(cars, Constants.CarsLowerCase);
+        }
+
+        public static string GetLocalSuppliers(CarDealerContext context) 
+        {
+            GenerateMapper();
+
+            var suppliers = context.Suppliers
+                .Where(s => !s.IsImporter)
+                .ProjectTo<ExportLocalSupplierDto>(mapper.ConfigurationProvider)
+                .ToList();
+
+            return Serializer<List<ExportLocalSupplierDto>>(suppliers, Constants.SuppliersLowerCase);
+        }
+
+        public static string GetCarsWithTheirListOfParts(CarDealerContext context)
+        {
+            GenerateMapper();
+
+            var cars = context.Cars
+                .OrderByDescending(c => c.TravelledDistance)
+                .ThenBy(c => c.Model)
+                .Take(5)
+                .ProjectTo<ExportCarWithListOfPartsDto>(mapper.ConfigurationProvider)
+                .ToList();
+
+            return Serializer<List<ExportCarWithListOfPartsDto>>(cars, Constants.CarsLowerCase);
+        }
+
+        public static string GetTotalSalesByCustomer(CarDealerContext context)
+        {
+            GenerateMapper();
+
+            var customers = context.Customers
+                .Where(c => c.Sales.Count() > 0)
+                .ProjectTo<ExportCustomerTotalSalesDto>(mapper.ConfigurationProvider)
+                .OrderByDescending(c => c.SpentMoney)
+                .ToList();
+
+            return Serializer<List<ExportCustomerTotalSalesDto>>(customers, Constants.CustomersLowerCase);
+        }
+
+        public static string GetSalesWithAppliedDiscount(CarDealerContext context)
+        {
+            GenerateMapper();
+
+            var sales = context.Sales
+                .ProjectTo<ExportSalesWithAppliedDiscountDto>(mapper.ConfigurationProvider)
+                .ToList();
+
+            return Serializer<List<ExportSalesWithAppliedDiscountDto>>(sales, Constants.SalesLowerCase);
+        }
         #endregion
 
         #region Private Methods
